@@ -1,0 +1,85 @@
+
+/* styles/global.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali&display=swap');
+
+@font-face {
+  font-family: 'Nikosh';
+  src: url('/fonts/Nikosh.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Boisakh';
+  src: url('/fonts/LiAlinurBoisakhUnicode-Regular.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Inter','Nikosh', sans-serif;
+}
+
+html,
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* ====================== this styles are for the scroll bar =============== */
+
+body {
+    --sb-track-color: #ffffff;
+    --sb-thumb-color: #ccccccb0;
+    --sb-size: 10px;
+  
+    scrollbar-color: var(--sb-thumb-color) 
+                     var(--sb-track-color);
+  }
+  
+  body::-webkit-scrollbar {
+    width: var(--sb-size)
+  }
+  
+  body::-webkit-scrollbar-track {
+    background: var(--sb-track-color);
+    border-radius: 8px;
+  }
+  
+  body::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb-color);
+    border-radius: 8px;
+    border: 2px solid #aeb7b38b;
+    }
+
+    /*======================= scrollbar styling done ================= */
+
+
+    .react-datepicker-wrapper {
+      width: 100%;
+  }
+  
+  .react-datepicker__input-container {
+      width: 100%;
+  }
+  
+  .react-datepicker__input-container input {
+      width: 100%;
+      border: 2px solid green;
+      border-radius: 5px;
+      padding: 5px 10px;
+  }
+  
+  .react-datepicker {
+      font-size: 32px; /* Increase this value to make the calendar larger */
+  }
+  
