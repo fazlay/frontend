@@ -7,19 +7,102 @@ import { faCartPlus, faEye, faPlus, faTrashCan } from '@fortawesome/free-solid-s
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useQuery } from '@tanstack/react-query';
 
+// Types
+interface Product {
+    id: number;
+    title: string;
+    price: number;
+    brand: string;
+    // Add other product properties as needed
+}
+
+// Components
+const ProductButton = ({ icon, onClick, children }: { icon: any; onClick?: () => void; children: React.ReactNode }) => (
+    <button
+        onClick={onClick}
+        className="flex h-10 w-[180px] items-center justify-center rounded-md border-2 border-white/30 bg-white/30 font-semibold text-white transition-colors hover:border-transparent hover:bg-[#03A629]"
+    >
+        <FontAwesomeIcon icon={icon} className="mr-2 h-[20px] w-[20px]" />
+        {children}
+    </button>
+);
+
+const CartButton = ({ isInCart, onAddToCart }: { isInCart: boolean; onAddToCart: () => void }) => {
+    if (isInCart) {
+        return (
+            <ProductButton icon={faTrashCan}>
+                <div className="flex flex-row items-center justify-between">
+                    1 Added in Cart
+                    <FontAwesomeIcon icon={faPlus} className="h-[20px] w-[20px]" />
+                </div>
+            </ProductButton>
+        );
+    }
+    return (
+        <ProductButton icon={faCartPlus} onClick={onAddToCart}>
+            Add to Cart
+        </ProductButton>
+    );
+};
+
+const ProductCard = ({
+    product,
+    isInCart,
+    onAddToCart,
+}: {
+    product: Product;
+    isInCart: boolean;
+    onAddToCart: (product: Product) => void;
+}) => (
+    <div className="group w-52">
+        <div className="relative h-80 w-full overflow-hidden rounded-lg">
+            <div
+                className="h-full w-full bg-cover bg-center bg-no-repeat transition-transform duration-300 group-hover:scale-105"
+                style={{ backgroundImage: "url('/assets/tshirt-01.png')" }}
+            />
+            <div className="absolute inset-0 flex items-end justify-center opacity-100 transition-opacity duration-300 group-hover:opacity-100">
+                <div className="mb-8 flex flex-col gap-3">
+                    <CartButton isInCart={isInCart} onAddToCart={() => onAddToCart(product)} />
+                    <ProductButton icon={faEye}>Quick View</ProductButton>
+                </div>
+            </div>
+        </div>
+
+        <div className="mt-4 space-y-2">
+            <span className="text-sm text-gray-500">{product.brand}</span>
+            <h3 className="text-base font-bold leading-snug text-gray-900">{product.title}</h3>
+            <div className="flex items-center gap-2">
+                <span className="text-blue-500 text-lg font-bold">${product.price}</span>
+                <span className="text-lg text-gray-400 line-through">${product.price}</span>
+            </div>
+        </div>
+    </div>
+);
+
+// Custom hook for cart management
+const useCart = () => {
+    const [cart, setCart] = useState<Product[]>([]);
+
+    const addToCart = (product: Product) => {
+        if (!cart.find((item) => item.id === product.id)) {
+            setCart([...cart, product]);
+        }
+    };
+
+    const isInCart = (productId: number) => cart.some((item) => item.id === productId);
+
+    return { cart, addToCart, isInCart };
+};
+
 export default function Home() {
-    const [cart, setCart] = useState<any>([]);
+    const { cart, addToCart, isInCart } = useCart();
 
     const { isLoading, data } = useQuery({
         queryKey: ['products'],
         queryFn: async () => zodSafeQuery(`https://dummyjson.com/products`)(),
     });
+
     const products = data?.result?.products;
-    const addToCart = (product: any) => {
-        if (!cart.find((item: any) => item.id === product.id)) {
-            setCart([...cart, product]);
-        }
-    };
 
     if (isLoading) {
         return <div className="flex h-[200px] items-center justify-center">Loading...</div>;
@@ -34,58 +117,15 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <main className="mx-auto w-[1112px]  py-8">
-                <div className="flex w-full flex-row  flex-wrap justify-between">
-                    {products?.map((product) => (
-                        <div className="group w-52">
-                            <div className="relative h-80 w-full overflow-hidden rounded-lg">
-                                <div
-                                    className="h-full w-full bg-cover bg-center bg-no-repeat transition-transform duration-300 group-hover:scale-105"
-                                    style={{ backgroundImage: "url('/assets/tshirt-01.png')" }}
-                                />
-
-                                <div className="absolute inset-0 flex items-end justify-center opacity-100 transition-opacity duration-300  group-hover:opacity-100">
-                                    <div className="mb-8 flex flex-col gap-3">
-                                        {cart.some((item) => item.id === product.id) ? (
-                                            <button className="flex h-10 w-[180px] items-center justify-center rounded-md border-2 border-white/30 bg-white/30 font-semibold text-white transition-colors hover:border-transparent hover:bg-[#03A629] ">
-                                                <div className="flex flex-row items-center justify-between">
-                                                    <FontAwesomeIcon
-                                                        icon={faTrashCan}
-                                                        className="mr-2 h-[20px] w-[20px]"
-                                                    />
-                                                    1 Added in Cart
-                                                    <FontAwesomeIcon icon={faPlus} className=" h-[20px] w-[20px]" />
-                                                </div>
-                                            </button>
-                                        ) : (
-                                            <button
-                                                className="flex h-10 w-[180px] items-center justify-center rounded-md border-2 border-white/30 bg-white/30 font-semibold text-white transition-colors hover:border-transparent hover:bg-[#03A629] "
-                                                onClick={() => addToCart(product)}
-                                            >
-                                                <FontAwesomeIcon icon={faCartPlus} className="mr-2 h-[20px] w-[20px]" />
-                                                Add to Cart
-                                            </button>
-                                        )}
-                                        <button className="flex h-10 w-[180px] items-center justify-center rounded-md border-2 border-white/30 bg-white/30 text-white transition-colors hover:border-transparent hover:bg-[#03A629] ">
-                                            <FontAwesomeIcon icon={faEye} className="mr-2 h-[20px] w-[20px]" /> Quick
-                                            View
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Product Info */}
-                            <div className="mt-4 space-y-2">
-                                <span className="text-sm text-gray-500">Fablife</span>
-                                <h3 className="text-base font-bold leading-snug text-gray-900">
-                                    Fablife Mens Premium Designer Edition T Shirt
-                                </h3>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-blue-500 text-lg font-bold">$2500</span>
-                                    <span className="text-lg text-gray-400 line-through">$2500</span>
-                                </div>
-                            </div>
-                        </div>
+            <main className="mx-auto w-[1112px] py-8">
+                <div className="flex w-full flex-row flex-wrap justify-between">
+                    {products?.map((product: Product) => (
+                        <ProductCard
+                            key={product.id}
+                            product={product}
+                            isInCart={isInCart(product.id)}
+                            onAddToCart={addToCart}
+                        />
                     ))}
                 </div>
             </main>
