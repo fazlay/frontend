@@ -1,9 +1,30 @@
 import Head from 'next/head';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 
 import BaseLayout from '@/Layouts/BaseLayout';
+import zodSafeQuery from '@/utils/zodSafeQuery';
+import { faCartPlus, faEye, faPlus, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useQuery } from '@tanstack/react-query';
 
 export default function Home() {
+    const [cart, setCart] = useState<any>([]);
+
+    const { isLoading, data } = useQuery({
+        queryKey: ['products'],
+        queryFn: async () => zodSafeQuery(`https://dummyjson.com/products`)(),
+    });
+    const products = data?.result?.products;
+    const addToCart = (product: any) => {
+        if (!cart.find((item: any) => item.id === product.id)) {
+            setCart([...cart, product]);
+        }
+    };
+
+    if (isLoading) {
+        return <div className="flex h-[200px] items-center justify-center">Loading...</div>;
+    }
+
     return (
         <>
             <Head>
@@ -14,30 +35,55 @@ export default function Home() {
             </Head>
 
             <main className="mx-auto w-[1112px]  py-8">
-                <div className="flex w-full flex-row justify-between">
-                    {[1, 2, 3, 4, 5].map((index) => (
-                        <div className="group w-[210px]" key={index}>
-                            <div className=" z-0 h-[332px]   bg-[url('/assets/tshirt-01.png')] ">
-                                <div className="invisible z-10 flex h-full w-full flex-row items-end justify-center gap-x-[10px] bg-black bg-opacity-50 pb-[30px] text-[20px] text-white group-hover:visible ">
-                                    <a className="flex h-[41px] w-[41px] flex-row items-center justify-center rounded-md border-2 border-[#ADADAD] hover:bg-white  hover:text-[#000] ">
-                                        <p>icon</p>
-                                    </a>
-                                    <a className="flex h-[41px] w-[41px] flex-row items-center justify-center rounded-md border-2 border-[#ADADAD] hover:bg-white  hover:text-[#000]">
-                                        <p>icon</p>
-                                    </a>
+                <div className="flex w-full flex-row  flex-wrap justify-between">
+                    {products?.map((product) => (
+                        <div className="group w-52">
+                            <div className="relative h-80 w-full overflow-hidden rounded-lg">
+                                <div
+                                    className="h-full w-full bg-cover bg-center bg-no-repeat transition-transform duration-300 group-hover:scale-105"
+                                    style={{ backgroundImage: "url('/assets/tshirt-01.png')" }}
+                                />
+
+                                <div className="absolute inset-0 flex items-end justify-center opacity-100 transition-opacity duration-300  group-hover:opacity-100">
+                                    <div className="mb-8 flex flex-col gap-3">
+                                        {cart.some((item) => item.id === product.id) ? (
+                                            <button className="flex h-10 w-[180px] items-center justify-center rounded-md border-2 border-white/30 bg-white/30 font-semibold text-white transition-colors hover:border-transparent hover:bg-[#03A629] ">
+                                                <div className="flex flex-row items-center justify-between">
+                                                    <FontAwesomeIcon
+                                                        icon={faTrashCan}
+                                                        className="mr-2 h-[20px] w-[20px]"
+                                                    />
+                                                    1 Added in Cart
+                                                    <FontAwesomeIcon icon={faPlus} className=" h-[20px] w-[20px]" />
+                                                </div>
+                                            </button>
+                                        ) : (
+                                            <button
+                                                className="flex h-10 w-[180px] items-center justify-center rounded-md border-2 border-white/30 bg-white/30 font-semibold text-white transition-colors hover:border-transparent hover:bg-[#03A629] "
+                                                onClick={() => addToCart(product)}
+                                            >
+                                                <FontAwesomeIcon icon={faCartPlus} className="mr-2 h-[20px] w-[20px]" />
+                                                Add to Cart
+                                            </button>
+                                        )}
+                                        <button className="flex h-10 w-[180px] items-center justify-center rounded-md border-2 border-white/30 bg-white/30 text-white transition-colors hover:border-transparent hover:bg-[#03A629] ">
+                                            <FontAwesomeIcon icon={faEye} className="mr-2 h-[20px] w-[20px]" /> Quick
+                                            View
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                            <div>
-                                <span className="text-[14px] font-light text-[#5A6573]">Fablife</span>
-                                <h3 className="text-[16px] font-bold text-black">
-                                    Fablife Mens Premiu Designer Edition T Shirt
+
+                            {/* Product Info */}
+                            <div className="mt-4 space-y-2">
+                                <span className="text-sm text-gray-500">Fablife</span>
+                                <h3 className="text-base font-bold leading-snug text-gray-900">
+                                    Fablife Mens Premium Designer Edition T Shirt
                                 </h3>
-                                <span className="flex flex-row">
-                                    <p className="text-[20px] font-bold text-[#1882FF]">$ 2500</p>
-                                    <p className="ml-[10px] text-[20px] font-normal text-[#77818C] line-through">
-                                        $ 2500
-                                    </p>
-                                </span>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-blue-500 text-lg font-bold">$2500</span>
+                                    <span className="text-lg text-gray-400 line-through">$2500</span>
+                                </div>
                             </div>
                         </div>
                     ))}
