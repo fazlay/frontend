@@ -1,1 +1,1 @@
-export const itemsLoadPerPage: number = 5;
+export const itemsLoadPerPage: any = 5;

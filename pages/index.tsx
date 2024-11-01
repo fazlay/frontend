@@ -73,7 +73,7 @@ const ProductCard = ({
 );
 
 export default function Home() {
-    const { cart, addToCart, isInCart } = useCart();
+    const { addToCart, isInCart } = useCart();
 
     const { isLoading, data } = useQuery({
         queryKey: ['products'],
