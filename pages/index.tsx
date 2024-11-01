@@ -1,20 +1,13 @@
 import Head from 'next/head';
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 
 import BaseLayout from '@/Layouts/BaseLayout';
+import useCart from '@/hooks/useCart';
+import { Product } from '@/types/product.types';
 import zodSafeQuery from '@/utils/zodSafeQuery';
 import { faCartPlus, faEye, faPlus, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useQuery } from '@tanstack/react-query';
-
-// Types
-interface Product {
-    id: number;
-    title: string;
-    price: number;
-    brand: string;
-    // Add other product properties as needed
-}
 
 // Components
 const ProductButton = ({ icon, onClick, children }: { icon: any; onClick?: () => void; children: React.ReactNode }) => (
@@ -60,7 +53,7 @@ const ProductCard = ({
                 className="h-full w-full bg-cover bg-center bg-no-repeat transition-transform duration-300 group-hover:scale-105"
                 style={{ backgroundImage: "url('/assets/tshirt-01.png')" }}
             />
-            <div className="absolute inset-0 flex items-end justify-center opacity-100 transition-opacity duration-300 group-hover:opacity-100">
+            <div className="absolute inset-0 flex items-end justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 <div className="mb-8 flex flex-col gap-3">
                     <CartButton isInCart={isInCart} onAddToCart={() => onAddToCart(product)} />
                     <ProductButton icon={faEye}>Quick View</ProductButton>
@@ -78,21 +71,6 @@ const ProductCard = ({
         </div>
     </div>
 );
-
-// Custom hook for cart management
-const useCart = () => {
-    const [cart, setCart] = useState<Product[]>([]);
-
-    const addToCart = (product: Product) => {
-        if (!cart.find((item) => item.id === product.id)) {
-            setCart([...cart, product]);
-        }
-    };
-
-    const isInCart = (productId: number) => cart.some((item) => item.id === productId);
-
-    return { cart, addToCart, isInCart };
-};
 
 export default function Home() {
     const { cart, addToCart, isInCart } = useCart();
