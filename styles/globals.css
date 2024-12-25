@@ -1,29 +1,27 @@
-
 /* styles/global.css */
 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali&display=swap');
 
 @font-face {
-  font-family: 'Nikosh';
-  src: url('/fonts/Nikosh.ttf') format('ttf');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+    font-family: 'Nikosh';
+    src: url('/fonts/Nikosh.ttf') format('ttf');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
 @font-face {
-  font-family: 'Boisakh';
-  src: url('/fonts/LiAlinurBoisakhUnicode-Regular.ttf') format('ttf');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+    font-family: 'Boisakh';
+    src: url('/fonts/LiAlinurBoisakhUnicode-Regular.ttf') format('ttf');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
 
-
 * {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  font-family: 'Inter','Nikosh', sans-serif;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', 'Nikosh', sans-serif;
 }
 
 html,
@@ -41,45 +39,105 @@ body {
     --sb-track-color: #ffffff;
     --sb-thumb-color: #ccccccb0;
     --sb-size: 10px;
-  
-    scrollbar-color: var(--sb-thumb-color) 
-                     var(--sb-track-color);
-  }
-  
-  body::-webkit-scrollbar {
-    width: var(--sb-size)
-  }
-  
-  body::-webkit-scrollbar-track {
+
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+}
+
+body::-webkit-scrollbar {
+    width: var(--sb-size);
+}
+
+body::-webkit-scrollbar-track {
     background: var(--sb-track-color);
     border-radius: 8px;
-  }
-  
-  body::-webkit-scrollbar-thumb {
+}
+
+body::-webkit-scrollbar-thumb {
     background: var(--sb-thumb-color);
     border-radius: 8px;
     border: 2px solid #aeb7b38b;
-    }
+}
 
-    /*======================= scrollbar styling done ================= */
+/*======================= scrollbar styling done ================= */
 
+.react-datepicker-wrapper {
+    width: 100%;
+}
 
-    .react-datepicker-wrapper {
-      width: 100%;
-  }
-  
-  .react-datepicker__input-container {
-      width: 100%;
-  }
-  
-  .react-datepicker__input-container input {
-      width: 100%;
-      border: 2px solid green;
-      border-radius: 5px;
-      padding: 5px 10px;
-  }
-  
-  .react-datepicker {
-      font-size: 32px; /* Increase this value to make the calendar larger */
-  }
-  
+.react-datepicker__input-container {
+    width: 100%;
+}
+
+.react-datepicker__input-container input {
+    width: 100%;
+    border: 2px solid green;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+.react-datepicker {
+    font-size: 32px; /* Increase this value to make the calendar larger */
+}
+
+/* HTML: <div class="ribbon">Your text content</div> */
+.ribbon {
+    font-size: 28px;
+    font-weight: bold;
+    color: #fff;
+}
+.ribbon {
+    --f: 0.5em; /* control the folded part*/
+    --r: 0.8em; /* control the ribbon shape */
+    --s: 0.4em; /* control the ribbon shape (the radius) */
+
+    position: absolute;
+    top: 20px;
+    left: 4px;
+    padding-inline: 0.25em;
+
+    /* left: calc(-1 * var(--f)); */
+    line-height: 1.8;
+
+    /* gradient background 0  */
+    background: linear-gradient(90deg, #f27d00 0%, #ffa03b 100%);
+    border-bottom: var(--f) solid red;
+
+    /* linear-gradient(180deg, #f27d00 0%, #ffa03b 100%) */
+    border-right: var(--r) solid blue;
+    border-radius: var(--s) 0 var(--s) var(--s);
+    clip-path: polygon(
+        0 0,
+        0 calc(100% - var(--f)),
+        var(--f) 100%,
+        var(--f) calc(100% - var(--f)),
+        100% calc(100% - var(--f)),
+        calc(100% - var(--r)) calc(50% - var(--f) / 2),
+        100% 0
+    );
+}
+
+/* ----------- */
+
+/* HTML: <div class="ribbon">Your text content</div> */
+/* .ribbon {
+    font-size: 28px;
+    font-weight: bold;
+    color: #fff;
+}
+.ribbon {
+    --r: 0.4em; 
+    --c: #fa6900;
+
+    position: absolute;
+    top: 20px;
+    left: calc(-1 * var(--r));
+    line-height: 1.8;
+    padding: 0 0.5em calc(2 * var(--r));
+    border-radius: var(--r) 0 0 var(--r);
+    background:
+        radial-gradient(100% 50% at left, var(--c) 98%, #0000 101%) 100% 0/0.5lh calc(100% - 2 * var(--r)),
+        radial-gradient(100% 50% at right, #0005 98%, #0000 101%) 0 100% / var(--r) calc(2 * var(--r)),
+        conic-gradient(from 90deg at var(--r) calc(100% - 2 * var(--r)), #0000 25%, var(--c) 0) 0 0 / calc(101% - 0.5lh)
+            100%;
+    background-repeat: no-repeat;
+} */

@@ -1,7 +1,9 @@
 import Head from 'next/head';
 import { ReactNode } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 
 import BaseLayout from '@/Layouts/BaseLayout';
+import DiscountSvg from '@/components/DiscountSvg';
 import useCart from '@/hooks/useCart';
 import { Product } from '@/types/product.types';
 import zodSafeQuery from '@/utils/zodSafeQuery';
@@ -47,8 +49,21 @@ const ProductCard = ({
     isInCart: boolean;
     onAddToCart: (product: Product) => void;
 }) => (
-    <div className="group w-52">
-        <div className="relative h-80 w-full overflow-hidden rounded-lg">
+    <div className="group relative w-52 p-2">
+        <div
+            className="absolute start-0.5 top-10 z-10 flex justify-center  px-2 py-1 pt-2 font-bold text-white"
+            style={{
+                width: '100px', // Desired width
+                height: '50px', // Desired height
+                overflow: 'hidden', // Prevent overflow
+                backgroundImage: `url('data:image/svg+xml;utf8,${encodeURIComponent(renderToStaticMarkup(<DiscountSvg />))}')`,
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: 'contain',
+            }}
+        >
+            -200%
+        </div>
+        <div className="relative -z-10 h-80 w-full overflow-hidden rounded-lg ">
             <div
                 className="h-full w-full bg-cover bg-center bg-no-repeat transition-transform duration-300 group-hover:scale-105"
                 style={{ backgroundImage: "url('/assets/tshirt-01.png')" }}
